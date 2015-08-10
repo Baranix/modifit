@@ -24,6 +24,7 @@ class UserAvatar(models.Model):
 
 class Item(models.Model):
 	item_name = models.CharField(max_length=100)
+	image = models.ImageField(upload_to='img/items')
 
 	def __unicode__(self):
 		return self.item_name
@@ -47,33 +48,70 @@ class hasSize(models.Model):
 	hips = models.DecimalField(max_digits=4, decimal_places=1, default=0, null=True, blank=True)
 	length = models.DecimalField(max_digits=4, decimal_places=1, default=0, null=True, blank=True)
 
+	def __unicode__(self):
+		return self.size
+
 class hasColor(models.Model):
 	item = models.ForeignKey(Item)
+	color_name = models.CharField(max_length=50, null=True, blank=True)
 	red = models.PositiveIntegerField(default=0, validators=[MaxValueValidator(255)])
 	green = models.PositiveIntegerField(default=0, validators=[MaxValueValidator(255)])
 	blue = models.PositiveIntegerField(default=0, validators=[MaxValueValidator(255)])
 
-class Patterns(models.Model):
+	def __unicode__(self):
+		if self.color_name != None:
+			return self.color_name
+		else:
+			return "Default"
+
+class Pattern(models.Model):
 	pattern_name = models.CharField(max_length=100, unique=True)
+
+	def __unicode__(self):
+		return self.pattern_name
 
 class hasPattern(models.Model):
 	item = models.ForeignKey(Item)
-	pattern = models.ForeignKey(Patterns)
+	pattern = models.ForeignKey(Pattern)
 
-class Materials(models.Model):
-	material_name = models.CharField(max_length=100,unique=True)
+class Material(models.Model):
+	material_name = models.CharField(max_length=100, unique=True)
 
-class hasMaterials(models.Model):
+	def __unicode__(self):
+		return self.material_name
+
+class hasMaterial(models.Model):
 	item = models.ForeignKey(Item)
-	material = models.ForeignKey(Materials)
+	material = models.ForeignKey(Material)
+	amount = models.DecimalField(max_digits=5,
+		decimal_places=2,
+		default=100.00,
+		validators=[MinValueValidator(0), MaxValueValidator(100.00)],
+		verbose_name="Amount / Percentage")
 
-class Categories(models.Model):
+class Category(models.Model):
 	category_name = models.CharField(max_length=150, unique=True)
 
-class hasCategory(models.Model):
-	item = models.ForeignKey(Item)
-	category = models.ForeignKey(Categories)
+	def __unicode__(self):
+		return self.category_name
 
+	class Meta:
+		verbose_name = "Category"
+		verbose_name_plural = "Categories"
+
+class SubCategory(models.Model):
+	category = models.ForeignKey(Category)
+	subcategory_name = models.CharField(max_length=150, unique=True)
+
+	def __unicode__(self):
+		return self.subcategory_name
+
+class hasSubCategory(models.Model):
+	item = models.ForeignKey(Item)
+	subcategory = models.ForeignKey(SubCategory)
+
+	def __unicode__(self):
+		return "Subcategory"
 
 class Wardrobe(models.Model):
 	user = models.ForeignKey(User)
