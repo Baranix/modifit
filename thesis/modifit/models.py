@@ -24,7 +24,6 @@ class UserAvatar(models.Model):
 
 class Item(models.Model):
 	item_name = models.CharField(max_length=100)
-	image = models.ImageField(upload_to='img/items')
 
 	def __unicode__(self):
 		return self.item_name
@@ -57,6 +56,7 @@ class hasColor(models.Model):
 	red = models.PositiveIntegerField(default=0, validators=[MaxValueValidator(255)])
 	green = models.PositiveIntegerField(default=0, validators=[MaxValueValidator(255)])
 	blue = models.PositiveIntegerField(default=0, validators=[MaxValueValidator(255)])
+	image = models.ImageField(upload_to='img/items')
 
 	def __unicode__(self):
 		if self.color_name != None:

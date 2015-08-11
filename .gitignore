@@ -2,3 +2,5 @@
 *.pyc
 thesis/thesis/settings.py
 thesis/modifit/migrations/
+thesis/modifit/backup/
+thesis/media/img/items/

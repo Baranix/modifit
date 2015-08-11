@@ -48,7 +48,24 @@ class hasColorInline(admin.TabularInline):
 	verbose_name_plural = "Colors"
 
 class ItemAdmin(admin.ModelAdmin):
-	inlines = [hasSubCategoryInline, hasSizeInline, hasColorInline, hasPatternInline, hasMaterialInline]
+	inlines = [
+		hasSubCategoryInline,
+		hasSizeInline,
+		hasColorInline,
+		hasPatternInline, 
+		hasMaterialInline
+	]
+	
+	list_display = ('thumbnail', 'item_name')
+
+	def thumbnail(self, obj):
+		color = hasColor.objects.filter(item_id=obj.id)
+		all_thumbs = ''
+		for i in range(color.count()):
+			all_thumbs = all_thumbs + '<img src="' + color[i].image.url + '" style="height:85px; width:auto;" />'
+		return all_thumbs
+		
+	thumbnail.allow_tags = True
 
 admin.site.register(Category, CategoryAdmin)
 admin.site.register(Item, ItemAdmin)
