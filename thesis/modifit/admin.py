@@ -10,7 +10,7 @@ from .models import Item, hasSize, hasColor
 from .models import Category, SubCategory, hasSubCategory
 from .models import Pattern, hasPattern
 from .models import Material, hasMaterial
-
+from .models import Brand
 
 class SubCategoryInline(admin.TabularInline):
 	model = SubCategory
@@ -61,11 +61,12 @@ class ItemAdmin(admin.ModelAdmin):
 	]
 
 	fieldsets = [
-		(None, {'fields': ['item_name', 'published']}),
+		(None, {'fields': ['item_name', 'brand', 'published']}),
 	]
 	
-	list_display = ('thumbnail', 'item_name', 'created_by', 'created_on', 'published')
+	list_display = ('category', 'subcategory', 'thumbnail', 'item_name', 'brand', 'edited', 'created', 'published')
 
+	list_filter = ('hassubcategory__subcategory__category', 'brand', 'created_on', 'published')
 
 	def thumbnail(self, obj):
 		color = hasColor.objects.filter(item_id=obj.id)
@@ -73,8 +74,34 @@ class ItemAdmin(admin.ModelAdmin):
 		for i in range(color.count()):
 			all_thumbs = all_thumbs + '<img src="' + color[i].image.url + '" style="height:85px; width:auto;" />'
 		return all_thumbs
-	thumbnail.allow_tags = True
 
+	def edited(self, obj):
+		return str(obj.edited_by) + "<br />" + obj.edited_on.strftime('%Y-%m-%d %H:%M:%S')
+
+	def created(self, obj):
+		return str(obj.created_by) + "<br />" + obj.created_on.strftime('%Y-%m-%d %H:%M:%S')
+
+	# Allow HTML tags
+	thumbnail.allow_tags = True
+	edited.allow_tags = True
+	created.allow_tags = True
+
+	def subcategory(self, obj):
+		hassubcat = hasSubCategory.objects.get(item_id=obj.id)
+		subcat = SubCategory.objects.get(id=hassubcat.subcategory_id)
+		return subcat
+
+	def category(self, obj):
+		hassubcat = hasSubCategory.objects.get(item_id=obj.id)
+		subcat = SubCategory.objects.get(id=hassubcat.subcategory_id)
+		cat = Category.objects.get(id=subcat.category_id)
+		return cat
+
+	# Allow Sortable columns
+	subcategory.admin_order_field = 'hassubcategory__subcategory'
+	category.admin_order_field = 'hassubcategory__subcategory__category'
+	edited.admin_order_field = 'edited_on'
+	created.admin_order_field = 'created_on'
 
 	def save_model(self, request, obj, form, change):
 		if change:
@@ -89,3 +116,4 @@ admin.site.register(Category, CategoryAdmin)
 admin.site.register(Item, ItemAdmin)
 admin.site.register(Pattern)
 admin.site.register(Material)
+admin.site.register(Brand)

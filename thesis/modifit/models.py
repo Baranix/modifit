@@ -22,13 +22,19 @@ class UserAvatar(models.Model):
 	)
 	skintone = models.CharField(max_length=1, choices=SKINTONE_CHOICES)
 
+class Brand(models.Model):
+	brand_name = models.CharField(max_length=100)
+
+	def __unicode__(self):
+		return self.brand_name
 
 class Item(models.Model):
 	item_name = models.CharField(max_length=100)
+	brand = models.ForeignKey(Brand, verbose_name="Brand")
 	created_by = models.ForeignKey(User, related_name='created_by')
-	created_on = models.DateTimeField(auto_now_add=True)
-	edited_by = models.ForeignKey(User, related_name='edited_by', null=True, blank=True)
-	edited_on = models.DateTimeField(auto_now=True, null=True, blank=True)
+	created_on = models.DateTimeField(auto_now_add=True, verbose_name="Created date")
+	edited_by = models.ForeignKey(User, related_name='edited_by', null=True, blank=True, verbose_name="Last edited by")
+	edited_on = models.DateTimeField(auto_now=True, null=True, blank=True, verbose_name="Last edited date")
 	published = models.BooleanField(default=False, verbose_name="Publish?")
 
 	def __unicode__(self):
