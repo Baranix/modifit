@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
 from django.core.validators import MinValueValidator, MaxValueValidator
+import datetime
 
 # Create your models here.
 
@@ -24,6 +25,11 @@ class UserAvatar(models.Model):
 
 class Item(models.Model):
 	item_name = models.CharField(max_length=100)
+	created_by = models.ForeignKey(User, related_name='created_by')
+	created_on = models.DateTimeField(auto_now_add=True)
+	edited_by = models.ForeignKey(User, related_name='edited_by', null=True, blank=True)
+	edited_on = models.DateTimeField(auto_now=True, null=True, blank=True)
+	published = models.BooleanField(default=False, verbose_name="Publish?")
 
 	def __unicode__(self):
 		return self.item_name
@@ -83,11 +89,13 @@ class Material(models.Model):
 class hasMaterial(models.Model):
 	item = models.ForeignKey(Item)
 	material = models.ForeignKey(Material)
-	amount = models.DecimalField(max_digits=5,
+	amount = models.DecimalField(
+		max_digits=5,
 		decimal_places=2,
 		default=100.00,
 		validators=[MinValueValidator(0), MaxValueValidator(100.00)],
-		verbose_name="Amount / Percentage")
+		verbose_name="Amount / Percentage"
+	)
 
 class Category(models.Model):
 	category_name = models.CharField(max_length=150, unique=True)
