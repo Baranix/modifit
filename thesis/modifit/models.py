@@ -104,7 +104,7 @@ class hasMaterial(models.Model):
 	)
 
 class Category(models.Model):
-	category_name = models.CharField(max_length=150, unique=True)
+	category_name = models.CharField(max_length=150, unique=True, verbose_name="Category")
 
 	def __unicode__(self):
 		return self.category_name
@@ -115,7 +115,7 @@ class Category(models.Model):
 
 class SubCategory(models.Model):
 	category = models.ForeignKey(Category)
-	subcategory_name = models.CharField(max_length=150, unique=True)
+	subcategory_name = models.CharField(max_length=150, unique=True, verbose_name="Subcategory")
 
 	def __unicode__(self):
 		return self.subcategory_name

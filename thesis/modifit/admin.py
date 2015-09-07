@@ -64,9 +64,21 @@ class ItemAdmin(admin.ModelAdmin):
 		(None, {'fields': ['item_name', 'brand', 'published']}),
 	]
 	
-	list_display = ('category', 'subcategory', 'thumbnail', 'item_name', 'brand', 'edited', 'created', 'published')
+	list_display = ('thumbnail', 'item_name', 'category', 'subcategory', 'brand', 'edited', 'created', 'published')
 
-	list_filter = ('hassubcategory__subcategory__category', 'brand', 'created_on', 'published')
+	list_filter = (
+		'hassubcategory__subcategory__category__category_name',
+		'hassubcategory__subcategory__subcategory_name',
+		'brand',
+		'created_on',
+		'published',
+	)
+
+	search_fields = [
+		'item_name',
+		'hassubcategory__subcategory__category__category_name',
+		'hassubcategory__subcategory__subcategory_name',
+	]
 
 	def thumbnail(self, obj):
 		color = hasColor.objects.filter(item_id=obj.id)
