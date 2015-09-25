@@ -23,7 +23,7 @@ class UserAvatar(models.Model):
 	skintone = models.CharField(max_length=1, choices=SKINTONE_CHOICES)
 
 class Brand(models.Model):
-	brand_name = models.CharField(max_length=100)
+	brand_name = models.CharField(max_length=100, default="None")
 
 	def __unicode__(self):
 		return self.brand_name
