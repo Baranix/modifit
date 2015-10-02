@@ -91,18 +91,19 @@ class ItemAdmin(admin.ModelAdmin):
 	def created(self, obj):
 		return str(obj.created_by) + "<br />" + obj.created_on.strftime('%Y-%m-%d %H:%M:%S')
 
+	def category(self, obj):
+		hascat = hasCategory.objects.filter(item_id=obj.id)
+		#subcat = SubCategory.objects.get(id=hassubcat.subcategory_id)
+		cat = ""
+		for cid in hascat:
+			cat = cat + "<br />" + ( str( Category.objects.get(id=cid.category_id).__unicode__() ) )
+		return cat[6:]
+
 	# Allow HTML tags
 	thumbnail.allow_tags = True
 	edited.allow_tags = True
 	created.allow_tags = True
-
-	def category(self, obj):
-		hascat = hasCategory.objects.filter(item_id=obj.id)
-		#subcat = SubCategory.objects.get(id=hassubcat.subcategory_id)
-		cat = []
-		for cid in hascat:
-			cat.append( str( Category.objects.get(id=cid.category_id).__unicode__() ) )
-		return cat
+	category.allow_tags = True
 
 	# Allow Sortable columns
 	#category.admin_order_field = 'hascategory__category'
