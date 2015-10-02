@@ -97,9 +97,11 @@ class ItemAdmin(admin.ModelAdmin):
 	created.allow_tags = True
 
 	def category(self, obj):
-		hascat = hasCategory.objects.get(item_id=obj.id)
+		hascat = hasCategory.objects.filter(item_id=obj.id)
 		#subcat = SubCategory.objects.get(id=hassubcat.subcategory_id)
-		cat = Category.objects.get(id=hascat.category_id)
+		cat = []
+		for cid in hascat:
+			cat.append( str( Category.objects.get(id=cid.category_id).__unicode__() ) )
 		return cat
 
 	# Allow Sortable columns
