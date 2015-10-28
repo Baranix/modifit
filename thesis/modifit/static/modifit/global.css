@@ -17,6 +17,16 @@ body
 	background-color: #5B0C41;
 }
 
+a
+{
+	color: #A95B8F;
+	text-decoration: none;
+}
+a:hover
+{
+	text-decoration: underline;
+}
+
 #login_content
 {
 	/*background-color: #5B0C41;
@@ -26,18 +36,22 @@ body
 	margin: 0px auto;
 }
 
-h1
+#login_content h1
 {
 	margin-top: 35%;
 	margin-bottom: 30px;
 	margin-left: auto;
 	margin-right: auto;
 	text-align: center;
-	color: #CF9ABE;
 	width: 300px;
 	height: 100px;
 	line-height: 100px;
 	white-space: nowrap;
+}
+
+h1
+{
+	color: #CF9ABE;
 	font-family: Existence;
 	font-size: 80px;
 	text-shadow: 2px 2px 5px #340023;
@@ -77,15 +91,17 @@ th
 input[type='text'], input[type='password']
 {
 	border-radius: 5px;
-	border: 1px solid #340023;
-	padding: 2px;
+	border: 1px solid #822B66;
+	padding: 3px;
 	font-family: Helvetica;
 	background: #A95B8F;
 }
 
 input[type='text']:focus, input[type='password']:focus
 {
-	outline-color: #CF9ABE;
+	/*outline-color: #CF9ABE;*/
+	outline: none;
+	box-shadow: 0px 0px 7px #000000;
 }
 
 input[type='submit']
@@ -100,4 +116,23 @@ input[type='submit']
 	font-family: Asap;
 	font-size: 14px;
 	color: #340023;
+}
+
+.alert_box
+{
+	margin-left: auto;
+	margin-right: auto;
+	margin-top: 10%;
+	width: 400px;
+	text-align: center;
+}
+
+.alert_box_head
+{
+	margin-bottom: 20px;
+	color: #CF9ABE;
+	font-family: Existence;
+	font-size: 24px;
+	font-weight: 900;
+	text-shadow: 2px 2px 5px #340023;
 }

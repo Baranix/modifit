@@ -2,7 +2,7 @@ from django.shortcuts import render
 from django.shortcuts import render_to_response
 from django.http import HttpResponse, HttpResponseRedirect
 from django.contrib.auth.models import User
-from django.contrib.auth import authenticate, login
+from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.template import RequestContext
 from .forms import LoginForm
@@ -62,8 +62,17 @@ def index(request):
 
 @login_required(login_url='/') #if not logged in redirect to /
 def home(request):
-	greet = "Hello!"
-	return render( request, 'modifit/home.html', { 'greet': greet } )
+	current_user = request.user
+	if current_user.first_name != '':
+		name = current_user.first_name
+	else:
+		name = current_user.username
+	return render( request, 'modifit/home.html', { 'name': name } )
+
+@login_required(login_url='/')
+def logging_out(request):
+	logout(request)
+	return render( request, 'modifit/logout.html' )
 
 
 def wardrobe(request, wardrobe_id):
