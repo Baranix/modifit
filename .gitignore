@@ -1,5 +1,6 @@
 *.log
 *.pyc
+*.txt
 thesis/thesis/settings.py
 thesis/modifit/migrations/
 thesis/modifit/backup/
