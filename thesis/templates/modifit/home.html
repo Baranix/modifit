@@ -8,6 +8,19 @@
 	<body>
 		<h1>{{ name }}'s Wardrobe</h1>
 
+		<div id="new_set">
+			<table>
+				<tr>
+					{% for i in items %}
+						<td>
+							<div class="item_name">{{ i.name }}</div>
+							<img src='{{ i.image.url }}' class="item_image" />
+						</td>
+					{% endfor %}
+				</tr>
+			</table>
+		</div>
+
 		<form action="/logout/" method="post">
 			{% csrf_token %}
 			<input type="submit" value="Logout" />

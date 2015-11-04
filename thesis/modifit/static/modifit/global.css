@@ -141,3 +141,14 @@ input[type='submit'], input[type='button']
 	font-size: 12px;
 	margin: 0px !important;
 }
+
+#new_set
+{
+	width: 45%;
+}
+
+.item_image
+{
+	height: 200px;
+	width: auto;
+}

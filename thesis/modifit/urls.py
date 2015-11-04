@@ -10,5 +10,5 @@ urlpatterns = [
     url(r'^register/$', views.register, name='register'),
     url(r'^reg_success/$', views.reg_success, name='reg_success'),
     #url(r'^$', views.home, name='home'),
-    url(r'^(?P<wardrobe_id>[0-9]+)/$', views.wardrobe, name='wardrobe'),
+    #url(r'^(?P<wardrobe_id>[0-9]+)/$', views.wardrobe, name='wardrobe'),
 ]
