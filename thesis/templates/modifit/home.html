@@ -4,22 +4,40 @@
 	<head>
 		<title>Your Wardrobe - Modifit</title>
 		<link rel="stylesheet" type="text/css" href="{% static 'modifit/global.css' %}" />
+		<link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css">
 	</head>
 	<body>
-		<h1>{{ name }}'s Wardrobe</h1>
+		<h1 id="name_addItems">{{ name }}, rate the following items!</h1>
 
-		<div id="new_set">
-			<table>
-				<tr>
-					{% for i in items %}
-						<td>
-							<div class="item_name">{{ i.name }}</div>
-							<img src='{{ i.image.url }}' class="item_image" />
-						</td>
-					{% endfor %}
-				</tr>
-			</table>
-		</div>
+		<form action="">
+			{% csrf_token %}
+			<div class="content">
+				<table id="new_set">
+					<tr>
+						{% for i in items %}
+							{% cycle '' '' '' '' '</tr><tr>' %}
+								<td class="row_item">
+									<img src='{{ i.item.image }}' class="item_image" id="item{{ i.item.id }}" alt="{{ i.item.id }}-{{ i.category.name }}" />
+									<br>
+									<div class="stars">
+										<input class="star star-5" id="star-5-{{ i.item.id }}" type="radio" name="star{{ i.item.id }}"/>
+										<label class="star star-5" for="star-5-{{ i.item.id }}"></label>
+										<input class="star star-4" id="star-4-{{ i.item.id }}" type="radio" name="star{{ i.item.id }}"/>
+										<label class="star star-4" for="star-4-{{ i.item.id }}"></label>
+										<input class="star star-3" id="star-3-{{ i.item.id }}" type="radio" name="star{{ i.item.id }}"/>
+										<label class="star star-3" for="star-3-{{ i.item.id }}"></label>
+										<input class="star star-2" id="star-2-{{ i.item.id }}" type="radio" name="star{{ i.item.id }}"/>
+										<label class="star star-2" for="star-2-{{ i.item.id }}"></label>
+										<input class="star star-1" id="star-1-{{ i.item.id }}" type="radio" name="star{{ i.item.id }}"/>
+										<label class="star star-1" for="star-1-{{ i.item.id }}"></label>
+									</div>
+								</td>
+						{% endfor %}
+					</tr>
+				</table>
+			</div>
+			<input type="submit" value="Add Items to Wardrobe" />
+		</form>
 
 		<form action="/logout/" method="post">
 			{% csrf_token %}

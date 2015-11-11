@@ -6,7 +6,7 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.template import RequestContext
 
-from .models import Item
+from .models import Item, hasCategory
 
 from .forms import LoginForm, RegForm
 
@@ -73,7 +73,7 @@ def home(request):
 		name = current_user.first_name
 	else:
 		name = current_user.username
-	items = Item.objects.all()
+	items = hasCategory.objects.all()
 	return render( request, 'modifit/home.html', { 'name': name, 'items': items } )
 
 @login_required(login_url='/')
