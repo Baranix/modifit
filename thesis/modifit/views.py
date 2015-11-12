@@ -6,7 +6,7 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.template import RequestContext
 
-from .models import Item, hasCategory
+from .models import Item, hasCategory, Wardrobe
 
 from .forms import LoginForm, RegForm
 
@@ -65,18 +65,7 @@ def index(request):
 
 		return render_to_response( 'modifit/index.html', { 'form': form, 'error_message': error_message }, context_instance=RequestContext(request) )
 
-
 @login_required(login_url='/') #if not logged in redirect to /
-def home(request):
-	current_user = request.user
-	if current_user.first_name != '':
-		name = current_user.first_name
-	else:
-		name = current_user.username
-	items = hasCategory.objects.all()
-	return render( request, 'modifit/home.html', { 'name': name, 'items': items } )
-
-@login_required(login_url='/')
 def logging_out(request):
 	logout(request)
 	return render( request, 'modifit/logout.html' )
@@ -133,7 +122,80 @@ def reg_success(request):
 		return render(request, 'modifit/reg_success.html')
 
 
-"""def wardrobe(request, wardrobe_id):
-	response = "Wardrobe ID: " + str(wardrobe_id)
-	user = 1;
-	return render(request, 'modifit/wardrobe.html', { 'response' : response, 'user' : user })"""
+@login_required(login_url='/')
+def home(request):
+	current_user = request.user
+	if current_user.first_name != '':
+		name = current_user.first_name
+	else:
+		name = current_user.username
+
+	categorized = hasCategory.objects.all()
+	categorizedItems = []
+	for i in categorized:
+		categorizedItems.append(i.item)
+
+	wardrobe = Wardrobe.objects.filter(user_id=request.user.id)
+	wardrobeItems = []
+	for i in wardrobe:
+		wardrobeItems.append(i.item)
+
+	items = [i for i in categorizedItems if i not in wardrobeItems]
+
+	return render( request, 'modifit/home.html', { 'name': name, 'items': items } )
+
+@login_required(login_url='/')
+def rate(request):
+	if request.POST:
+		for i in Item.objects.all():
+			#print
+			#print i
+
+			rate = request.POST.get('rate' + str(i.id))
+			#print rate
+			if rate is None:
+				"""print "Item: " + str(i.id)
+				print 'rate' + str(i.id)
+				print "Rate is None"""
+				continue
+
+			item_id = request.POST.get('item_id_' + str(i.id))
+			#print item_id
+			if item_id is not None:
+				try:
+					wardrobe = Wardrobe.objects.get(user_id=request.user.id, item_id=item_id)
+					wardrobe.rating = rate
+					wardrobe.save()
+					"""print
+					print "Item rated again."
+					print "Item: " + str(i.id)
+					print "Rating: " + str(rate)"""
+				except Wardrobe.DoesNotExist:
+					wardrobe = Wardrobe( user_id=request.user.id, item_id=i.id, rating=int(rate) )
+					wardrobe.save()
+					"""print
+					print "Item added to wardrobe."
+					print "Item: " + str(i.id)
+					print "Rating: " + str(rate)"""
+					
+		"""
+		rate = request.POST.get('rate'+str(1))
+		item_id = request.POST.get('item_id_' + str(1))
+		item_id = Wardrobe.objects.get(item_id=int(item_id)).exists()
+		name = request.user.username
+		user_id = request.user.id
+		#item = Item.objects.get(pk=1)
+		#item_id = item.id
+		return render(request, 'modifit/test.html', { 'name' : name, 'user_id' : user_id, 'item_id' : item_id, 'rate' : rate })
+		"""
+		return HttpResponseRedirect('/wardrobe/')
+
+@login_required(login_url='/')
+def wardrobe(request):
+	current_user = request.user
+	if current_user.first_name != '':
+		name = current_user.first_name
+	else:
+		name = current_user.username
+	wardrobe = Wardrobe.objects.filter(user_id=request.user.id)
+	return render(request, 'modifit/wardrobe.html', { 'name' : name, 'wardrobe' : wardrobe })
