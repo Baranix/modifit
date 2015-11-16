@@ -6,3 +6,4 @@ thesis/modifit/migrations/
 thesis/modifit/backup/
 thesis/media/img/items/
 thesis/templates/modifit/test.html
+*.sql
