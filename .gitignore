@@ -7,3 +7,4 @@ thesis/modifit/backup/
 thesis/media/img/items/
 thesis/templates/modifit/test.html
 *.sql
+thesis/media/img/
