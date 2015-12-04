@@ -1,0 +1,16 @@
+<html>
+	<head>
+	</head>
+	<body>
+
+		<a href="{% url 'recommender' 'collab' %}">Collaborative</a>
+		<br>
+		<a href="{% url 'recommender' 'content' %}">Content-Based</a>
+		<br>
+		<a href="{% url 'recommender' 'hybrid' %}">Hybrid</a>
+
+		<br><br>
+		{{ results }}
+
+	</body>
+</html>
